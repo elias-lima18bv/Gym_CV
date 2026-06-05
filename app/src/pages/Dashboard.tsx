@@ -1,10 +1,10 @@
-import { useState, useMemo } from "react";
-import { useApp } from "@/context/AppContext";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { Users, UserCheck, DollarSign, AlertTriangle, UserPlus, CreditCard, CalendarPlus, BarChart3 } from "lucide-react";
-import { formatCVE, formatDate, formatTime, getInitials } from "@/lib/utils";
-import { weeklyRevenue, monthlyRevenue } from "@/data/mockData";
-import { toast } from "sonner";
+import {useMemo, useState} from "react";
+import {useApp} from "@/context/AppContext";
+import {Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import {AlertTriangle, BarChart3, CalendarPlus, CreditCard, DollarSign, UserCheck, UserPlus, Users} from "lucide-react";
+import {formatCVE, formatDate, formatTime, getInitials} from "@/lib/utils";
+import {monthlyRevenue, weeklyRevenue} from "@/data/mockData";
+import {toast} from "sonner";
 
 const timePeriods = [
   { key: "7d", label: "7 Dias" },
@@ -241,7 +241,7 @@ export default function Dashboard() {
 
       {/* Quick Actions */}
       <div>
-        <h3 className="text-[#F2F2F2] font-semibold text-lg mb-4">Acoes Rapidas</h3>
+        <h3 className="text-[#F2F2F2] font-semibold text-lg mb-4">Ações Rápidas</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <ActionCard icon={<UserPlus size={28} className="text-[#FF6B00]" />} title="Registar Membro" description="Adicione um novo membro ao ginasio" onClick={() => handleQuickAction("Registar Membro")} />
           <ActionCard icon={<CreditCard size={28} className="text-[#22C55E]" />} title="Processar Pagamento" description="Registe um novo pagamento" onClick={() => handleQuickAction("Processar Pagamento")} />

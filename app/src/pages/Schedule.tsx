@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
-import { useApp } from "@/context/AppContext";
-import { Users, MapPin, Plus, X } from "lucide-react";
-import { gymAreas, scheduleSessions as allSessions } from "@/data/mockData";
-import { getShortDayName, getDayName } from "@/lib/utils";
-import { toast } from "sonner";
+import {useMemo, useState} from "react";
+import {useApp} from "@/context/AppContext";
+import {MapPin, Plus, Users, X} from "lucide-react";
+import {gymAreas, scheduleSessions as allSessions} from "@/data/mockData";
+import {getDayName, getShortDayName} from "@/lib/utils";
+import {toast} from "sonner";
 
 const timeSlots = [
   "07:00", "08:00", "09:00", "10:00", "11:00",

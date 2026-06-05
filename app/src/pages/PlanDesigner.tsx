@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { useApp } from "@/context/AppContext";
-import { Layers, Plus, Edit2, ToggleLeft, ToggleRight, X, Check } from "lucide-react";
-import { formatCVE } from "@/lib/utils";
-import { gymAreas } from "@/data/mockData";
-import { toast } from "sonner";
-import type { MembershipPlan } from "@/data/types";
+import {useState} from "react";
+import {useApp} from "@/context/AppContext";
+import {Check, Edit2, Layers, Plus, ToggleLeft, ToggleRight, X} from "lucide-react";
+import {formatCVE} from "@/lib/utils";
+import {gymAreas} from "@/data/mockData";
+import {toast} from "sonner";
+import type {MembershipPlan} from "@/data/types";
 
 const billingCycles = [
   { key: "monthly", label: "Mensal" },

@@ -1,6 +1,6 @@
-import { LayoutDashboard, Users, Calendar, CreditCard, QrCode } from "lucide-react";
-import type { Page } from "@/App";
-import { cn } from "@/lib/utils";
+import {Calendar, CreditCard, LayoutDashboard, QrCode, Users} from "lucide-react";
+import type {Page} from "@/App";
+import {cn} from "@/lib/utils";
 
 interface MobileNavProps {
   currentPage: Page;

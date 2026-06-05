@@ -1,6 +1,13 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
-import type { Member, MembershipPlan, Invoice, AttendanceRecord, TeamMember, GymArea } from "@/data/types";
-import { members as initialMembers, membershipPlans as initialPlans, invoices as initialInvoices, attendanceRecords as initialAttendance, teamMembers as initialTeam, gymAreas } from "@/data/mockData";
+import {createContext, type ReactNode, useCallback, useContext, useState} from "react";
+import type {AttendanceRecord, GymArea, Invoice, Member, MembershipPlan, TeamMember} from "@/data/types";
+import {
+    attendanceRecords as initialAttendance,
+    gymAreas,
+    invoices as initialInvoices,
+    members as initialMembers,
+    membershipPlans as initialPlans,
+    teamMembers as initialTeam
+} from "@/data/mockData";
 
 interface AppState {
   members: Member[];

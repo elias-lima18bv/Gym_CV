@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { AppProvider } from "./context/AppContext";
+import {useState} from "react";
+import {AppProvider} from "./context/AppContext";
 import Sidebar from "./components/Sidebar";
 import MobileNav from "./components/MobileNav";
 import Toolbar from "./components/Toolbar";
@@ -12,7 +12,7 @@ import Schedule from "./pages/Schedule";
 import PlanDesigner from "./pages/PlanDesigner";
 import Billing from "./pages/Billing";
 import Onboarding from "./pages/Onboarding";
-import { Toaster } from "@/components/ui/sonner";
+import {Toaster} from "@/components/ui/sonner";
 
 export type Page =
   | "dashboard"

@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { useApp } from "@/context/AppContext";
-import { UserPlus, Mail, Phone, Shield, Dumbbell, UserCheck, X } from "lucide-react";
-import { getInitials } from "@/lib/utils";
-import { toast } from "sonner";
-import type { TeamMember } from "@/data/types";
+import {useState} from "react";
+import {useApp} from "@/context/AppContext";
+import {Dumbbell, Mail, Phone, Shield, UserCheck, UserPlus, X} from "lucide-react";
+import {getInitials} from "@/lib/utils";
+import {toast} from "sonner";
+import type {TeamMember} from "@/data/types";
 
 const roleConfig = {
   admin: { label: "Administrador", icon: Shield, color: "#FF6B00" },

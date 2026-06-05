@@ -1,10 +1,10 @@
-import { useState, useCallback } from "react";
-import { useApp } from "@/context/AppContext";
-import { QRCodeSVG } from "qrcode.react";
-import { QrCode, Hash, CheckCircle, XCircle, Camera } from "lucide-react";
-import { formatDateTime } from "@/lib/utils";
-import { toast } from "sonner";
-import { gymAreas } from "@/data/mockData";
+import {useCallback, useState} from "react";
+import {useApp} from "@/context/AppContext";
+import {QRCodeSVG} from "qrcode.react";
+import {Camera, CheckCircle, Hash, QrCode, XCircle} from "lucide-react";
+import {formatDateTime} from "@/lib/utils";
+import {toast} from "sonner";
+import {gymAreas} from "@/data/mockData";
 
 type CheckInMode = "qr" | "pin";
 type CheckInResult = "idle" | "success" | "error";

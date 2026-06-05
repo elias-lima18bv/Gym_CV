@@ -1,6 +1,17 @@
-import { useState } from "react";
-import { Building2, Clock, Map, Users, Layers, CreditCard, CheckCircle, ChevronRight, ChevronLeft, Dumbbell } from "lucide-react";
-import { toast } from "sonner";
+import {useState} from "react";
+import {
+    Building2,
+    CheckCircle,
+    ChevronLeft,
+    ChevronRight,
+    Clock,
+    CreditCard,
+    Dumbbell,
+    Layers,
+    Map,
+    Users
+} from "lucide-react";
+import {toast} from "sonner";
 
 const steps = [
   { id: "gym", label: "Ginasio", icon: Building2, description: "Configure os dados do seu ginasio" },

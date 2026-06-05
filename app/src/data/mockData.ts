@@ -1,4 +1,4 @@
-import type { Member, MembershipPlan, GymArea, TeamMember, Invoice, AttendanceRecord, ScheduleSession } from "./types";
+import type {AttendanceRecord, GymArea, Invoice, Member, MembershipPlan, ScheduleSession, TeamMember} from "./types";
 
 export const gymAreas: GymArea[] = [
   { id: "a1", name: "Musculacao", icon: "Dumbbell", capacity: 40, currentOccupancy: 18, description: "Area de musculacao completa" },

@@ -1,9 +1,9 @@
-import { useState, useMemo } from "react";
-import { useApp } from "@/context/AppContext";
-import { Search, Plus, Edit2, Trash2, Eye, X, Filter } from "lucide-react";
-import { formatCVE, formatDate, getInitials } from "@/lib/utils";
-import { toast } from "sonner";
-import type { Member } from "@/data/types";
+import {useMemo, useState} from "react";
+import {useApp} from "@/context/AppContext";
+import {Edit2, Eye, Filter, Plus, Search, Trash2, X} from "lucide-react";
+import {formatCVE, formatDate, getInitials} from "@/lib/utils";
+import {toast} from "sonner";
+import type {Member} from "@/data/types";
 
 type ModalMode = "add" | "edit" | "view" | null;
 

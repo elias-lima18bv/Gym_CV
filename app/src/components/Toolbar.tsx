@@ -1,5 +1,5 @@
-import { Bell, Menu, Settings } from "lucide-react";
-import type { Page } from "@/App";
+import {Bell, Menu, Settings} from "lucide-react";
+import type {Page} from "@/App";
 
 const pageTitles: Record<Page, string> = {
   dashboard: "Dashboard",

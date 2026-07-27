@@ -5,6 +5,7 @@ import {AlertTriangle, BarChart3, CalendarPlus, CreditCard, DollarSign, UserChec
 import {formatCVE, formatDate, formatTime, getInitials} from "@/lib/utils";
 import {monthlyRevenue, weeklyRevenue} from "@/data/mockData";
 import {toast} from "sonner";
+import * as React from "react";
 
 const timePeriods = [
   { key: "7d", label: "7 Dias" },
@@ -97,8 +98,8 @@ export default function Dashboard() {
       <div className="bg-[#353535] border border-[#4A4A4A] rounded-xl p-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div>
-            <h3 className="text-[#F2F2F2] font-semibold text-lg">Visao Geral de Receitas</h3>
-            <p className="text-[#B0AEAA] text-sm">Acompanhe o desempenho financeiro do seu ginasio</p>
+            <h3 className="text-[#F2F2F2] font-semibold text-lg">Visão Geral de Receitas</h3>
+            <p className="text-[#B0AEAA] text-sm">Acompanhe o desempenho financeiro do seu ginásio</p>
           </div>
           <div className="flex bg-[#2B2B2B] rounded-md p-0.5">
             {timePeriods.map((tp) => (

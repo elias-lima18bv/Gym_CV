@@ -12,7 +12,7 @@ const tabs: { page: Page; label: string; icon: React.ElementType }[] = [
   { page: "members", label: "Membros", icon: Users },
   { page: "checkin", label: "Check-in", icon: QrCode },
   { page: "billing", label: "Fatura", icon: CreditCard },
-  { page: "schedule", label: "Horario", icon: Calendar },
+  { page: "schedule", label: "Horário", icon: Calendar },
 ];
 
 export default function MobileNav({ currentPage, onNavigate }: MobileNavProps) {

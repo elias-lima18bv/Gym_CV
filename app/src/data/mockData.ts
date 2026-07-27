@@ -42,7 +42,7 @@ export const members: Member[] = [
 ];
 
 export const teamMembers: TeamMember[] = [
-  { id: "t1", name: "Ricardo Sousa", email: "ricardo@ginasio.cv", role: "admin", phone: "+238 912 000 001", avatar: null, status: "active" },
+  { id: "t1", name: "Ricardo Sousa", email: "ricardo@ginasio.cv", role: "admin", phone: "+238 912 000 001", avatar: "https://i.pravatar.cc/150?u=t4", status: "active" },
   { id: "t2", name: "Patricia Amaral", email: "patricia@ginasio.cv", role: "manager", phone: "+238 912 000 002", avatar: null, status: "active" },
   { id: "t3", name: "Daniel Costa", email: "daniel@ginasio.cv", role: "trainer", phone: "+238 912 000 003", avatar: null, status: "active" },
   { id: "t4", name: "Helena Matos", email: "helena@ginasio.cv", role: "trainer", phone: "+238 912 000 004", avatar: null, status: "active" },

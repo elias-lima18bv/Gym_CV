@@ -13,9 +13,9 @@ const navItems: { page: Page; label: string; icon: React.ElementType }[] = [
   { page: "areas", label: "Areas", icon: Map },
   { page: "checkin", label: "Check-in", icon: QrCode },
   { page: "team", label: "Equipa", icon: UserCog },
-  { page: "schedule", label: "Horario", icon: Calendar },
+  { page: "schedule", label: "Horário", icon: Calendar },
   { page: "plandesigner", label: "Planos", icon: Layers },
-  { page: "billing", label: "Faturacao", icon: CreditCard },
+  { page: "billing", label: "Faturação", icon: CreditCard },
   { page: "onboarding", label: "Inicio", icon: Rocket },
 ];
 
@@ -26,7 +26,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
           <div className="p-5 flex items-center gap-3">
               <img className="w-9 h-9 rounded-[4px] gradient-orange flex items-center justify-center"
                    src="https://cdn-icons-png.flaticon.com/128/6201/6201278.png" width="45" height="25" alt="gimMaster"/>
-              <span className="text-[#F2F2F2] font-bold text-lg tracking-tight">GymMaster</span>
+              <span className="text-[#F2F2F2] font-bold text-lg tracking-tight">Gym-Elias</span>
           </div>
 
           {/* Navigation */}
@@ -56,7 +56,10 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
               <div className="flex items-center gap-2 text-xs text-[#B0AEAA]">
                   <div className="w-2 h-2 rounded-full bg-[#22C55E]"/>
                   <span>Sistema Online</span>
-              </div>
+                  <span className="footer-copyright">
+                      © 2026 Elias Lima
+                  </span>
+          </div>
           </div>
       </aside>
   );

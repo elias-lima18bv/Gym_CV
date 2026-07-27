@@ -4,13 +4,13 @@ import type {Page} from "@/App";
 const pageTitles: Record<Page, string> = {
   dashboard: "Dashboard",
   members: "Membros",
-  areas: "Areas do Ginasio",
+  areas: "Areas do Ginásio",
   checkin: "Check-in",
   team: "Equipa",
-  schedule: "Horario",
+  schedule: "Horário",
   plandesigner: "Planos de Membro",
-  billing: "Faturacao",
-  onboarding: "Inicio Rapido",
+  billing: "Faturação",
+  onboarding: "Inicio Rápido",
 };
 
 interface ToolbarProps {

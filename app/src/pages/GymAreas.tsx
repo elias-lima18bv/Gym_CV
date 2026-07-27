@@ -1,5 +1,6 @@
 import {Activity, Dumbbell, Flame, Heart, Sparkles, Swords} from "lucide-react";
 import {gymAreas} from "@/data/mockData";
+import * as React from "react";
 
 const iconMap: Record<string, React.ElementType> = {
   Dumbbell,

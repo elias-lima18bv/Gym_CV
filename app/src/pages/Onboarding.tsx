@@ -198,7 +198,7 @@ export default function Onboarding() {
               </div>
               <div className="bg-[#2B2B2B] border border-[#4A4A4A] rounded-lg p-4">
                 <p className="text-[#F2F2F2] font-medium text-sm mb-1">Moeda</p>
-                <p className="text-[#B0AEAA] text-xs">Cape Verdean Escudo (CVE)</p>
+                <p className="text-[#B0AEAA] text-xs">Escudo cabo-verdiano (CVE)</p>
               </div>
             </div>
           )}

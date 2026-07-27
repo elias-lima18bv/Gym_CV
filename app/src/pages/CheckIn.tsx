@@ -1,4 +1,4 @@
-import {useState, useCallback} from "react";
+import {useState, useCallback, useMemo} from "react";
 import { useApp } from "@/context/AppContext";
 import { QRCodeSVG } from "qrcode.react";
 import { QrCode, Hash, CheckCircle, XCircle, Camera } from "lucide-react";
@@ -108,12 +108,13 @@ function CheckIn() {
 
   const activeMembers = members.filter((m) => m.status === "active");
 
-  // const [timestamp, setTimestamp] = useState<number | null>(null);
+  // Timestamp gerado uma vez na montagem, acessível no render
+  const [qrTimestamp] = useState(() => Date.now());
 
-  /* const handleSelectMember = (id: string) => {
-    setSelectedMemberId(id);
-    setTimestamp(Date.now());
-  }; */
+    const qrValue = useMemo(() => {
+        if (!selectedMember) return "";
+        return `GYM-${selectedMember.id}-${qrTimestamp}`;
+    }, [selectedMember?.id]);
 
   return (
       <div className="p-4 lg:p-6 animate-fade-in">
@@ -189,7 +190,7 @@ function CheckIn() {
                       <div className="flex justify-center mb-4">
                         <div className="bg-white rounded-xl p-4">
                           <QRCodeSVG
-                              value={`GYM-${selectedMember.id}-${"timestamp"}`}
+                              value={qrValue}
                               size={200}
                               level="H"
                               includeMargin={false}

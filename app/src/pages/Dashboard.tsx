@@ -180,7 +180,7 @@ export default function Dashboard() {
           <div className="space-y-0">
             {recentActivity.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-[#B0AEAA] text-sm">Nenhuma atividade registrada hoje</p>
+                <p className="text-[#B0AEAA] text-sm">Nenhuma atividade registrar hoje</p>
                 <p className="text-[#B0AEAA] text-xs mt-1">Os membros aparecerao aqui quando fizerem check-in</p>
               </div>
             ) : (

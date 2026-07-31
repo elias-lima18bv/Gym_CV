@@ -49,7 +49,7 @@ export default function PlanDesigner() {
 
   const handleSave = () => {
     if (!formData.name || !formData.description || !formData.price || (formData.areas ?? []).length === 0) {
-      toast.error("Preencha todos os campos obrigatorios");
+      toast.error("Preencha todos os campos obrigatórios");
       return;
     }
     if (editingPlan) {

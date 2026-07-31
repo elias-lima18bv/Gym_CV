@@ -14,12 +14,12 @@ import {
 import {toast} from "sonner";
 
 const steps = [
-  { id: "gym", label: "Ginasio", icon: Building2, description: "Configure os dados do seu ginasio" },
-  { id: "schedule", label: "Horario", icon: Clock, description: "Defina o horario de funcionamento" },
+  { id: "gym", label: "Ginásio", icon: Building2, description: "Configure os dados do seu ginásio" },
+  { id: "schedule", label: "Horário", icon: Clock, description: "Defina o horário de funcionamento" },
   { id: "areas", label: "Areas", icon: Map, description: "Cadastre as areas de treino" },
   { id: "team", label: "Equipa", icon: Users, description: "Adicione a sua equipa" },
   { id: "plans", label: "Planos", icon: Layers, description: "Crie planos de matricula" },
-  { id: "billing", label: "Faturacao", icon: CreditCard, description: "Configure pagamentos" },
+  { id: "billing", label: "Faturação", icon: CreditCard, description: "Configure pagamentos" },
 ];
 
 export default function Onboarding() {
@@ -33,7 +33,7 @@ export default function Onboarding() {
       setCurrentStep(currentStep + 1);
     } else {
       setCompleted(true);
-      toast.success("Configuracao concluida! Bem-vindo ao GymMaster.");
+      toast.success("Configuração concluída! Bem-vindo ao GymMaster.");
     }
   };
 
@@ -149,7 +149,7 @@ export default function Onboarding() {
           {currentStep === 2 && (
             <div className="grid grid-cols-2 gap-3">
               {[
-                { name: "Musculacao", icon: Dumbbell },
+                { name: "Musculação", icon: Dumbbell },
                 { name: "Cardio", icon: "Heart" },
                 { name: "CrossFit", icon: "Flame" },
                 { name: "Yoga", icon: "Sparkles" },
@@ -191,7 +191,7 @@ export default function Onboarding() {
               <div className="bg-[#2B2B2B] border border-[#4A4A4A] rounded-lg p-4">
                 <p className="text-[#F2F2F2] font-medium text-sm mb-2">Metodos de Pagamento</p>
                 <div className="flex flex-wrap gap-2">
-                  {["Dinheiro", "Transferencia Bancaria", "Cartao de Credito", "POS Movel"].map((m) => (
+                  {["Dinheiro", "Transferência Bancaria", "Cartão de Credito", "POS Movel"].map((m) => (
                     <span key={m} className="px-3 py-1 bg-[rgba(255,107,0,0.15)] text-[#FF6B00] text-xs font-medium rounded-full">{m}</span>
                   ))}
                 </div>

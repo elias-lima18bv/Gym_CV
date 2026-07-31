@@ -61,7 +61,7 @@ export default function Members() {
 
   const handleSave = () => {
     if (!formData.name || !formData.email || !formData.planId) {
-      toast.error("Preencha todos os campos obrigatorios");
+      toast.error("Preencha todos os campos obrigatórios");
       return;
     }
     if (modalMode === "add") {

@@ -34,7 +34,7 @@ export default function Billing() {
 
   const handleAddInvoice = () => {
     if (!newInvoice.memberId || !newInvoice.amount || !newInvoice.dueDate) {
-      toast.error("Preencha todos os campos obrigatorios");
+      toast.error("Preencha todos os campos obrigatórios");
       return;
     }
     addInvoice({

@@ -1,21 +1,21 @@
 import type {AttendanceRecord, GymArea, Invoice, Member, MembershipPlan, ScheduleSession, TeamMember} from "./types";
 
 export const gymAreas: GymArea[] = [
-  { id: "a1", name: "Musculacao", icon: "Dumbbell", capacity: 40, currentOccupancy: 18, description: "Area de musculacao completa" },
-  { id: "a2", name: "Cardio", icon: "Heart", capacity: 25, currentOccupancy: 12, description: "Esteiras, bicicletas e elipticos" },
+  { id: "a1", name: "Musculação", icon: "Dumbbell", capacity: 40, currentOccupancy: 18, description: "Area de musculação completa" },
+  { id: "a2", name: "Cardio", icon: "Heart", capacity: 25, currentOccupancy: 12, description: "Esteiras, bicicletas e elípticos" },
   { id: "a3", name: "CrossFit", icon: "Flame", capacity: 20, currentOccupancy: 8, description: "Treino funcional e CrossFit" },
-  { id: "a4", name: "Yoga", icon: "Sparkles", capacity: 15, currentOccupancy: 6, description: "Sala de yoga e meditacao" },
+  { id: "a4", name: "Yoga", icon: "Sparkles", capacity: 15, currentOccupancy: 6, description: "Sala de yoga e meditação" },
   { id: "a5", name: "Pilates", icon: "Activity", capacity: 12, currentOccupancy: 4, description: "Equipamentos de Pilates" },
   { id: "a6", name: "Luta", icon: "Swords", capacity: 16, currentOccupancy: 7, description: "Boxe, Muay Thai e Jiu-Jitsu" },
 ];
 
 export const membershipPlans: MembershipPlan[] = [
-  { id: "p1", name: "Basico", description: "Acesso a area de musculacao e cardio", price: 3500, billingCycle: "monthly", areas: ["a1", "a2"], active: true, color: "#3B82F6", membersCount: 68 },
+  { id: "p1", name: "Basico", description: "Acesso a area de musculação e cardio", price: 3500, billingCycle: "monthly", areas: ["a1", "a2"], active: true, color: "#3B82F6", membersCount: 68 },
   { id: "p2", name: "Premium", description: "Acesso a todas as areas do ginásio", price: 5500, billingCycle: "monthly", areas: ["a1", "a2", "a3", "a4", "a5", "a6"], active: true, color: "#FF6B00", membersCount: 52 },
   { id: "p3", name: "Estudante", description: "Plano especial para estudantes", price: 2500, billingCycle: "monthly", areas: ["a1", "a2", "a3"], active: true, color: "#22C55E", membersCount: 24 },
   { id: "p4", name: "Familia", description: "Plano familiar ate 4 pessoas", price: 12000, billingCycle: "monthly", areas: ["a1", "a2", "a3", "a4", "a5", "a6"], active: true, color: "#8B5CF6", membersCount: 8 },
   { id: "p5", name: "Trimestral Premium", description: "Plano trimestral com desconto", price: 14500, billingCycle: "quarterly", areas: ["a1", "a2", "a3", "a4", "a5", "a6"], active: true, color: "#F59E0B", membersCount: 4 },
-  { id: "p6", name: "Anual VIP", description: "Plano anual com todos os beneficios", price: 55000, billingCycle: "yearly", areas: ["a1", "a2", "a3", "a4", "a5", "a6"], active: true, color: "#EF4444", membersCount: 3 },
+  { id: "p6", name: "Anual VIP", description: "Plano anual com todos os benefícios", price: 55000, billingCycle: "yearly", areas: ["a1", "a2", "a3", "a4", "a5", "a6"], active: true, color: "#EF4444", membersCount: 3 },
 ];
 
 export const members: Member[] = [
@@ -24,7 +24,7 @@ export const members: Member[] = [
   { id: "m3", name: "Maria Fernandes", email: "maria.f@email.cv", phone: "+238 934 567 890", planId: "p3", status: "active", joinDate: "2025-03-10", lastVisit: "2026-05-31", avatar: null, pin: "9012" },
   { id: "m4", name: "Joao Santos", email: "joao.s@email.cv", phone: "+238 945 678 901", planId: "p2", status: "active", joinDate: "2025-01-05", lastVisit: "2026-05-28", avatar: null, pin: "3456" },
   { id: "m5", name: "Beatriz Lopes", email: "beatriz.l@email.cv", phone: "+238 956 789 012", planId: "p1", status: "inactive", joinDate: "2024-11-20", lastVisit: "2026-04-15", avatar: null, pin: "7890" },
-  { id: "m6", name: "Pedro Goncalves", email: "pedro.g@email.cv", phone: "+238 967 890 123", planId: "p2", status: "active", joinDate: "2025-04-01", lastVisit: "2026-05-31", avatar: null, pin: "2345" },
+  { id: "m6", name: "Pedro Gonçalves", email: "pedro.g@email.cv", phone: "+238 967 890 123", planId: "p2", status: "active", joinDate: "2025-04-01", lastVisit: "2026-05-31", avatar: null, pin: "2345" },
   { id: "m7", name: "Sofia Rocha", email: "sofia.r@email.cv", phone: "+238 978 901 234", planId: "p4", status: "active", joinDate: "2025-02-15", lastVisit: "2026-05-30", avatar: null, pin: "6789" },
   { id: "m8", name: "Miguel Andrade", email: "miguel.a@email.cv", phone: "+238 989 012 345", planId: "p1", status: "active", joinDate: "2025-05-01", lastVisit: "2026-05-27", avatar: null, pin: "0123" },
   { id: "m9", name: "Laura Pires", email: "laura.p@email.cv", phone: "+238 990 123 456", planId: "p3", status: "active", joinDate: "2025-03-25", lastVisit: "2026-05-31", avatar: null, pin: "4567" },
@@ -38,7 +38,7 @@ export const members: Member[] = [
   { id: "m17", name: "Raquel Martins", email: "raquel.m@email.cv", phone: "+238 978 901 235", planId: "p2", status: "active", joinDate: "2025-01-08", lastVisit: "2026-05-31", avatar: null, pin: "7777" },
   { id: "m18", name: "Andre Fonseca", email: "andre.f@email.cv", phone: "+238 989 012 346", planId: "p6", status: "active", joinDate: "2024-12-01", lastVisit: "2026-05-31", avatar: null, pin: "8888" },
   { id: "m19", name: "Mariana Reis", email: "mariana.r@email.cv", phone: "+238 990 123 457", planId: "p1", status: "active", joinDate: "2025-05-20", lastVisit: "2026-05-29", avatar: null, pin: "9999" },
-  { id: "m20", name: "Goncalo Lima", email: "goncalo.l@email.cv", phone: "+238 901 234 568", planId: "p2", status: "active", joinDate: "2025-03-05", lastVisit: "2026-05-27", avatar: null, pin: "0000" },
+  { id: "m20", name: "Gonçalo Lima", email: "goncalo.l@email.cv", phone: "+238 901 234 568", planId: "p2", status: "active", joinDate: "2025-03-05", lastVisit: "2026-05-27", avatar: null, pin: "0000" },
 ];
 
 export const teamMembers: TeamMember[] = [
@@ -84,24 +84,24 @@ export const attendanceRecords: AttendanceRecord[] = [
 ];
 
 export const scheduleSessions: ScheduleSession[] = [
-  { id: "s1", title: "Musculacao Iniciante", trainerId: "t3", areaId: "a1", dayOfWeek: 1, startTime: "07:00", endTime: "08:00", maxCapacity: 12, enrolled: 8 },
+  { id: "s1", title: "Musculação Iniciante", trainerId: "t3", areaId: "a1", dayOfWeek: 1, startTime: "07:00", endTime: "08:00", maxCapacity: 12, enrolled: 8 },
   { id: "s2", title: "HIIT Cardio", trainerId: "t4", areaId: "a2", dayOfWeek: 1, startTime: "08:00", endTime: "09:00", maxCapacity: 15, enrolled: 10 },
   { id: "s3", title: "CrossFit WOD", trainerId: "t3", areaId: "a3", dayOfWeek: 1, startTime: "18:00", endTime: "19:00", maxCapacity: 16, enrolled: 14 },
   { id: "s4", title: "Yoga Flow", trainerId: "t4", areaId: "a4", dayOfWeek: 1, startTime: "19:00", endTime: "20:00", maxCapacity: 12, enrolled: 9 },
   { id: "s5", title: "Pilates", trainerId: "t4", areaId: "a5", dayOfWeek: 2, startTime: "07:00", endTime: "08:00", maxCapacity: 10, enrolled: 7 },
   { id: "s6", title: "Boxe Fitness", trainerId: "t3", areaId: "a6", dayOfWeek: 2, startTime: "18:00", endTime: "19:00", maxCapacity: 14, enrolled: 11 },
-  { id: "s7", title: "Musculacao Avancado", trainerId: "t3", areaId: "a1", dayOfWeek: 2, startTime: "19:00", endTime: "20:00", maxCapacity: 10, enrolled: 6 },
+  { id: "s7", title: "Musculação Avançado", trainerId: "t3", areaId: "a1", dayOfWeek: 2, startTime: "19:00", endTime: "20:00", maxCapacity: 10, enrolled: 6 },
   { id: "s8", title: "Spinning", trainerId: "t4", areaId: "a2", dayOfWeek: 3, startTime: "07:00", endTime: "08:00", maxCapacity: 15, enrolled: 12 },
   { id: "s9", title: "CrossFit WOD", trainerId: "t3", areaId: "a3", dayOfWeek: 3, startTime: "18:00", endTime: "19:00", maxCapacity: 16, enrolled: 13 },
   { id: "s10", title: "Yoga Relax", trainerId: "t4", areaId: "a4", dayOfWeek: 3, startTime: "19:00", endTime: "20:00", maxCapacity: 12, enrolled: 8 },
-  { id: "s11", title: "Musculacao Iniciante", trainerId: "t3", areaId: "a1", dayOfWeek: 4, startTime: "07:00", endTime: "08:00", maxCapacity: 12, enrolled: 9 },
+  { id: "s11", title: "Musculação Iniciante", trainerId: "t3", areaId: "a1", dayOfWeek: 4, startTime: "07:00", endTime: "08:00", maxCapacity: 12, enrolled: 9 },
   { id: "s12", title: "Muay Thai", trainerId: "t3", areaId: "a6", dayOfWeek: 4, startTime: "18:00", endTime: "19:00", maxCapacity: 14, enrolled: 10 },
-  { id: "s13", title: "Pilates Avancado", trainerId: "t4", areaId: "a5", dayOfWeek: 4, startTime: "19:00", endTime: "20:00", maxCapacity: 10, enrolled: 6 },
+  { id: "s13", title: "Pilates Avançado", trainerId: "t4", areaId: "a5", dayOfWeek: 4, startTime: "19:00", endTime: "20:00", maxCapacity: 10, enrolled: 6 },
   { id: "s14", title: "HIIT Cardio", trainerId: "t4", areaId: "a2", dayOfWeek: 5, startTime: "07:00", endTime: "08:00", maxCapacity: 15, enrolled: 11 },
   { id: "s15", title: "CrossFit Team", trainerId: "t3", areaId: "a3", dayOfWeek: 5, startTime: "18:00", endTime: "19:00", maxCapacity: 16, enrolled: 15 },
   { id: "s16", title: "Jiu-Jitsu", trainerId: "t3", areaId: "a6", dayOfWeek: 5, startTime: "19:00", endTime: "20:00", maxCapacity: 14, enrolled: 9 },
   { id: "s17", title: "Yoga Manha", trainerId: "t4", areaId: "a4", dayOfWeek: 6, startTime: "09:00", endTime: "10:00", maxCapacity: 12, enrolled: 7 },
-  { id: "s18", title: "Musculacao Livre", trainerId: "t3", areaId: "a1", dayOfWeek: 6, startTime: "10:00", endTime: "11:00", maxCapacity: 15, enrolled: 10 },
+  { id: "s18", title: "Musculação Livre", trainerId: "t3", areaId: "a1", dayOfWeek: 6, startTime: "10:00", endTime: "11:00", maxCapacity: 15, enrolled: 10 },
 ];
 
 export const weeklyRevenue = [

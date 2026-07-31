@@ -246,8 +246,8 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <ActionCard icon={<UserPlus size={28} className="text-[#FF6B00]" />} title="Registar Membro" description="Adicione um novo membro ao ginasio" onClick={() => handleQuickAction("Registar Membro")} />
           <ActionCard icon={<CreditCard size={28} className="text-[#22C55E]" />} title="Processar Pagamento" description="Registe um novo pagamento" onClick={() => handleQuickAction("Processar Pagamento")} />
-          <ActionCard icon={<CalendarPlus size={28} className="text-[#3B82F6]" />} title="Nova Sessao" description="Agende uma sessao de treino" onClick={() => handleQuickAction("Nova Sessao")} />
-          <ActionCard icon={<BarChart3 size={28} className="text-[#F59E0B]" />} title="Gerar Relatorio" description="Exporte dados financeiros" onClick={() => handleQuickAction("Gerar Relatorio")} />
+          <ActionCard icon={<CalendarPlus size={28} className="text-[#3B82F6]" />} title="Nova Sessao" description="Agende uma sessao de treino" onClick={() => handleQuickAction("Nova Sessão")} />
+          <ActionCard icon={<BarChart3 size={28} className="text-[#F59E0B]" />} title="Gerar Relatorio" description="Exporte dados financeiros" onClick={() => handleQuickAction("Gerar Relatório")} />
         </div>
       </div>
     </div>

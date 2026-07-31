@@ -46,7 +46,7 @@ export function getMonthName(month: number): string {
 }
 
 export function getDayName(day: number): string {
-  const names = ["Domingo", "Segunda", "Terca", "Quarta", "Quinta", "Sexta", "Sabado"];
+  const names = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado"];
   return names[day];
 }
 

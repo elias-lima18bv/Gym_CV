@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS gyms (
                                     horario_abertura TIME,
                                     horario_fechamento TIME,
                                     capacidade_max   INTEGER DEFAULT 100,
-                                    status          VARCHAR(20) DEFAULT 'ativo' CHECK (status IN ('ativo', 'inativo', 'manutencao')),
+                                    status          VARCHAR(20) DEFAULT 'ativo' CHECK (status IN ('ativo', 'inativo', 'manutenção')),
                                     logo_url        VARCHAR(500),
                                     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                                     updated_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP

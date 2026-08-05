@@ -57,7 +57,7 @@ export default function Sidebar({ currentPage, onNavigate }: SidebarProps) {
                   <div className="w-2 h-2 rounded-full bg-[#22C55E]"/>
                   <span>Sistema Online</span>
                   <span className="footer-copyright">
-                      © 2026 Elias Lima
+                      ©2026 Elias Lima
                   </span>
           </div>
           </div>

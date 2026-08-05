@@ -33,7 +33,7 @@ export default function Onboarding() {
       setCurrentStep(currentStep + 1);
     } else {
       setCompleted(true);
-      toast.success("Configuração concluída! Bem-vindo ao GymMaster.");
+      toast.success("Configuração concluída! Bem-vindo ao Gym-Elias.");
     }
   };
 
@@ -49,7 +49,7 @@ export default function Onboarding() {
             <CheckCircle size={40} className="text-[#22C55E]" />
           </div>
           <h2 className="text-[#F2F2F2] font-bold text-2xl mb-2">Configuracao Concluida!</h2>
-          <p className="text-[#B0AEAA] text-sm mb-6">O seu ginasio esta pronto para comecar. Pode agora gerir membros, registar pagamentos e acompanhar o crescimento do seu negocio.</p>
+          <p className="text-[#B0AEAA] text-sm mb-6">O seu ginasio está pronto para começar. Pode agora gerir membros, registar pagamentos e acompanhar o crescimento do seu negócio.</p>
           <button
             onClick={() => { setCompleted(false); setCurrentStep(0); }}
             className="px-6 py-3 gradient-orange rounded-md text-white font-semibold hover:brightness-110 transition-all cursor-pointer"
@@ -111,8 +111,8 @@ export default function Onboarding() {
           {currentStep === 0 && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Nome do Ginasio</label>
-                <input type="text" value={gymData.name} onChange={(e) => setGymData({ ...gymData, name: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00]" placeholder="Ex: Ginasio Cabo Verde" />
+                <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Nome do Ginásio</label>
+                <input type="text" value={gymData.name} onChange={(e) => setGymData({ ...gymData, name: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00]" placeholder="Ex: Ginásio Cabo Verde" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Endereco</label>
@@ -120,7 +120,7 @@ export default function Onboarding() {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Telefone</label>
-                <input type="tel" value={gymData.phone} onChange={(e) => setGymData({ ...gymData, phone: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00]" placeholder="+238 XXX XXX XXX" />
+                <input type="tel" value={gymData.phone} onChange={(e) => setGymData({ ...gymData, phone: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00]" placeholder="+238 XXX XX XX" />
               </div>
             </div>
           )}
@@ -153,6 +153,8 @@ export default function Onboarding() {
                 { name: "Cardio", icon: "Heart" },
                 { name: "CrossFit", icon: "Flame" },
                 { name: "Yoga", icon: "Sparkles" },
+                { name: "Pilates", icon: "Activity" },
+                { name: "Yoga", icon: "Swords" },
               ].map((area, i) => (
                 <div key={i} className="bg-[#2B2B2B] border border-[#4A4A4A] rounded-lg p-4 text-center hover:border-[#FF6B00] transition-colors cursor-pointer">
                   <p className="text-[#F2F2F2] text-sm font-medium">{area.name}</p>
@@ -164,8 +166,8 @@ export default function Onboarding() {
 
           {currentStep === 3 && (
             <div className="space-y-3">
-              <p className="text-[#B0AEAA] text-sm">A sua equipa ja foi configurada com os seguintes membros:</p>
-              {["Administrador", "Gerente", "Treinadores (2)", "Rececionista"].map((r, i) => (
+              <p className="text-[#B0AEAA] text-sm">A sua equipa já foi configurada com os seguintes membros:</p>
+              {["Administrador", "Gerente", "Treinadores/Coaches (3)", "Rececionista"].map((r, i) => (
                 <div key={i} className="flex items-center gap-2 text-[#F2F2F2] text-sm">
                   <CheckCircle size={14} className="text-[#22C55E]" />
                   {r}
@@ -177,7 +179,7 @@ export default function Onboarding() {
           {currentStep === 4 && (
             <div className="space-y-3">
               <p className="text-[#B0AEAA] text-sm">Planos de membro configurados:</p>
-              {["Basico - 3.500 CVE/mes", "Premium - 5.500 CVE/mes", "Estudante - 2.500 CVE/mes", "Familia - 12.000 CVE/mes"].map((p, i) => (
+              {["Básico - 3.500 CVE/mês", "Premium - 5.500 CVE/mês", "Estudante - 2.500 CVE/mês", "Família - 12.000 CVE/mês"].map((p, i) => (
                 <div key={i} className="flex items-center gap-2 text-[#F2F2F2] text-sm">
                   <CheckCircle size={14} className="text-[#22C55E]" />
                   {p}
@@ -189,9 +191,9 @@ export default function Onboarding() {
           {currentStep === 5 && (
             <div className="space-y-4">
               <div className="bg-[#2B2B2B] border border-[#4A4A4A] rounded-lg p-4">
-                <p className="text-[#F2F2F2] font-medium text-sm mb-2">Metodos de Pagamento</p>
+                <p className="text-[#F2F2F2] font-medium text-sm mb-2">Métodos de Pagamento</p>
                 <div className="flex flex-wrap gap-2">
-                  {["Dinheiro", "Transferência Bancaria", "Cartão de Credito", "POS Movel"].map((m) => (
+                  {["Dinheiro", "Transferência Bancaria", "Cartão de Credito", "POS Móvel"].map((m) => (
                     <span key={m} className="px-3 py-1 bg-[rgba(255,107,0,0.15)] text-[#FF6B00] text-xs font-medium rounded-full">{m}</span>
                   ))}
                 </div>

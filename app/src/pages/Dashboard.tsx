@@ -66,7 +66,7 @@ export default function Dashboard() {
           subtext={`+${members.filter((m) => {
             const d = new Date(m.joinDate);
             return d.getMonth() === 4 && d.getFullYear() === 2026;
-          }).length} este mes`}
+          }).length} este mês`}
           subtextColor="text-[#22C55E]"
         />
         <StatCard
@@ -80,7 +80,7 @@ export default function Dashboard() {
           label="Receita Mensal"
           value={formatCVE(stats.monthlyRevenueTotal)}
           valueColor="text-[#FF6B00]"
-          subtext="+15% vs mes anterior"
+          subtext="+15% vs mês anterior"
           subtextColor="text-[#22C55E]"
           gradient
         />
@@ -180,8 +180,8 @@ export default function Dashboard() {
           <div className="space-y-0">
             {recentActivity.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-[#B0AEAA] text-sm">Nenhuma atividade registrar hoje</p>
-                <p className="text-[#B0AEAA] text-xs mt-1">Os membros aparecerao aqui quando fizerem check-in</p>
+                <p className="text-[#B0AEAA] text-sm">Nenhuma atividade registada hoje</p>
+                <p className="text-[#B0AEAA] text-xs mt-1">Os membros aparecerão aqui quando fizerem check-in</p>
               </div>
             ) : (
               recentActivity.map((a, i) => (
@@ -244,10 +244,10 @@ export default function Dashboard() {
       <div>
         <h3 className="text-[#F2F2F2] font-semibold text-lg mb-4">Ações Rápidas</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          <ActionCard icon={<UserPlus size={28} className="text-[#FF6B00]" />} title="Registar Membro" description="Adicione um novo membro ao ginasio" onClick={() => handleQuickAction("Registar Membro")} />
-          <ActionCard icon={<CreditCard size={28} className="text-[#22C55E]" />} title="Processar Pagamento" description="Registe um novo pagamento" onClick={() => handleQuickAction("Processar Pagamento")} />
-          <ActionCard icon={<CalendarPlus size={28} className="text-[#3B82F6]" />} title="Nova Sessao" description="Agende uma sessao de treino" onClick={() => handleQuickAction("Nova Sessão")} />
-          <ActionCard icon={<BarChart3 size={28} className="text-[#F59E0B]" />} title="Gerar Relatorio" description="Exporte dados financeiros" onClick={() => handleQuickAction("Gerar Relatório")} />
+          <ActionCard icon={<UserPlus size={28} className="text-[#FF6B00]" />} title="Registar Membro" description="Adiciona um novo membro ao ginásio" onClick={() => handleQuickAction("Registar Membro")} />
+          <ActionCard icon={<CreditCard size={28} className="text-[#22C55E]" />} title="Processar Pagamento" description="Regista um novo pagamento" onClick={() => handleQuickAction("Processar Pagamento")} />
+          <ActionCard icon={<CalendarPlus size={28} className="text-[#3B82F6]" />} title="Nova Sessão" description="Agenda uma sessão de treino" onClick={() => handleQuickAction("Nova Sessão")} />
+          <ActionCard icon={<BarChart3 size={28} className="text-[#F59E0B]" />} title="Gerar Relatório" description="Exporta dados financeiros" onClick={() => handleQuickAction("Gerar Relatório")} />
         </div>
       </div>
     </div>

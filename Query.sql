@@ -604,7 +604,7 @@ CREATE TABLE IF NOT EXISTS auditoria_log (
 COMMENT ON TABLE auditoria_log IS 'Log de auditoria para rastreabilidade de ações';
 
 -- ============================================================
--- 17. TABELA: notificacoes (Notificações do Sistema)
+-- 17. TABELA: notificações (Notificações do Sistema)
 -- ============================================================
 CREATE TABLE IF NOT EXISTS notificacoes (
                                             id              SERIAL PRIMARY KEY,
@@ -867,7 +867,7 @@ INSERT INTO planos (id, nome, descricao, tipo_acesso, preco_mensal, preco_anual,
                                                                                                                                                  ('p6', 'Anual VIP', 'Plano anual com todos os beneficios', 'unico', 4583.33, 55000.00, 'yearly', ARRAY['a1', 'a2', 'a3', 'a4', 'a5', 'a6'], '#EF4444', TRUE, 'ativo')
 ON CONFLICT (id) DO NOTHING;
 
--- Membros (usuários com perfil 'membro')
+-- Membros (utilizadores com perfil 'membro')
 INSERT INTO usuarios (id, nome, email, telefone, senha_hash, perfil_id, gym_id, status, pin_checkin) VALUES
                                                                                                          ('m1', 'Ana Silva', 'ana.silva@email.cv', '+238 912 345 678', '$2a$10$hashed', (SELECT id FROM perfis WHERE nome='membro'), 1, 'active', '1234'),
                                                                                                          ('m2', 'Carlos Mendes', 'carlos.m@email.cv', '+238 923 456 789', '$2a$10$hashed', (SELECT id FROM perfis WHERE nome='membro'), 1, 'active', '5678'),
@@ -957,6 +957,9 @@ INSERT INTO checkins (id, membro_id, gym_id, area_id, data_hora, metodo) VALUES
                                                                              ('at14', 'm4', 1, 'a6', '2026-05-31T16:00:00', 'pin'),
                                                                              ('at15', 'm15', 1, 'a1', '2026-05-31T16:30:00', 'qr_code')
 ON CONFLICT (id) DO NOTHING;
+
+-- Adicionar coluna 'tipo' (entrada/saida) na tabela
+ALTER TABLE checkins ADD COLUMN tipo VARCHAR(10) NOT NULL DEFAULT 'entrada';
 
 -- Aulas agendadas (Schedule Sessions)
 INSERT INTO schedule_sessions (id, gym_id, titulo, instrutor_id, area_id, dia_semana, hora_inicio, hora_fim, capacidade_max, inscritos, tipo) VALUES

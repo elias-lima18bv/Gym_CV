@@ -11,11 +11,11 @@ const getHeaders = () => {
 
 export const api = {
     // Auth
-    async login(email: string, password: string) {
+    async login(email: string, senha: string) {
         const res = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ email, senha }), // ← estava "password", agora é "senha"
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error);
@@ -43,10 +43,17 @@ export const api = {
         return res.json();
     },
 
-    // Users
-    async getUsers() {
-        const res = await fetch(`${API_URL}/usuarios`, { headers: getHeaders() });
-        if (!res.ok) throw new Error('Erro ao buscar usuários');
+    // Dashboard
+    async getDashboardStats() {
+        const res = await fetch(`${API_URL}/dashboard/stats`, { headers: getHeaders() });
+        if (!res.ok) throw new Error('Erro ao carregar dashboard');
+        return res.json();
+    },
+
+    // Membros
+    async getMembros() {
+        const res = await fetch(`${API_URL}/membros`, { headers: getHeaders() });
+        if (!res.ok) throw new Error('Erro ao buscar membros');
         return res.json();
     },
 

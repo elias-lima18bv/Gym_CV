@@ -1032,6 +1032,44 @@ UNION ALL SELECT 'Aulas', COUNT(*) FROM schedule_sessions
 UNION ALL SELECT 'Receitas Semanais', COUNT(*) FROM receitas_semanais
 UNION ALL SELECT 'Receitas Mensais', COUNT(*) FROM receitas_mensais;
 
+
+-- Usuário Super Admin de teste (senha: 123456)
+-- Hash bcrypt para "123456"
+INSERT INTO usuarios (
+    nome, email, senha_hash, telefone, perfil_id, gym_id,
+    status, email_verificado, created_at, updated_at
+) VALUES (
+             'Elias Lima',
+             'elias@admin.com',
+             '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+             '999999999',
+             1,  -- super_admin
+             1,  -- gym_id
+             'ativo',
+             true,
+             NOW(),
+             NOW()
+         )
+ON CONFLICT (email) DO NOTHING;
+
+-- Usuário Recepcionista de teste (senha: 123456)
+INSERT INTO usuarios (
+    nome, email, senha_hash, telefone, perfil_id, gym_id,
+    status, email_verificado, created_at, updated_at
+) VALUES (
+             'Maria Recepção',
+             'maria@recep.com',
+             '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+             '912345678',
+             4,  -- recepcionista
+             1,
+             'ativo',
+             true,
+             NOW(),
+             NOW()
+         )
+ON CONFLICT (email) DO NOTHING;
+
 -- ============================================================
 -- FIM DO SCRIPT
 -- ============================================================

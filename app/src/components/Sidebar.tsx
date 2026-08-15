@@ -1,6 +1,7 @@
 import {Calendar, CreditCard, Layers, LayoutDashboard, Map, QrCode, Rocket, UserCog, Users,} from "lucide-react";
 import type {Page} from "@/App";
 import {cn} from "@/lib/utils";
+import * as React from "react";
 
 interface SidebarProps {
   currentPage: Page;

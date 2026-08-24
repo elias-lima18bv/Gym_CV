@@ -9,15 +9,15 @@ router.get('/stats', auth, async (req, res) => {
 
         // Total de membros (usuários com perfil_id = 7 = membro, ou todos exceto staff)
         const totalMembros = await pool.query(
-            `SELECT COUNT(*) FROM usuarios 
-       WHERE gym_id = $1 AND perfil_id = 7`, // 7 = membro
+            `SELECT COUNT(*) FROM usuarios
+             WHERE gym_id = $1 AND perfil_id = 7`, // 7 = membro
             [gymId]
         );
 
         // Membros ativos
         const membrosAtivos = await pool.query(
-            `SELECT COUNT(*) FROM usuarios 
-       WHERE gym_id = $1 AND perfil_id = 7 AND status = 'ativo'`,
+            `SELECT COUNT(*) FROM usuarios
+             WHERE gym_id = $1 AND perfil_id = 7 AND status = 'ativo'`,
             [gymId]
         );
 
@@ -41,11 +41,13 @@ router.get('/stats', auth, async (req, res) => {
         );
 
         // Receita gráfico 7 dias
+        // "Plano" = pagamento vinculado a uma assinatura (assinatura_id preenchido)
+        // "Extra" = pagamento avulso, sem assinatura_id (produto, personal, etc.)
         const receitaGrafico = await pool.query(
             `SELECT
                  DATE(data_pagamento) as data,
-                 SUM(CASE WHEN tipo = 'plano' THEN valor ELSE 0 END) as planos,
-                 SUM(CASE WHEN tipo = 'extra' THEN valor ELSE 0 END) as extras
+                 SUM(CASE WHEN assinatura_id IS NOT NULL THEN valor ELSE 0 END) as planos,
+                 SUM(CASE WHEN assinatura_id IS NULL THEN valor ELSE 0 END) as extras
              FROM pagamentos
              WHERE gym_id = $1
                AND data_pagamento >= CURRENT_DATE - INTERVAL '7 days'
@@ -76,17 +78,17 @@ router.get('/stats', auth, async (req, res) => {
         // Faturas pendentes
         const faturasPendentes = await pool.query(
             `SELECT
-                 p.id,
-                 u.nome,
-                 p.descricao,
-                 p.valor,
-                 p.data_vencimento
-             FROM pagamentos p
-                      JOIN usuarios u ON p.usuario_id = u.id
-             WHERE p.gym_id = $1
-               AND p.status = 'pendente'
-             ORDER BY p.data_vencimento ASC
-                 LIMIT 5`,
+           p.id,
+           u.nome,
+           p.descricao,
+           p.valor,
+           p.data_vencimento
+       FROM pagamentos p
+                JOIN usuarios u ON p.membro_id = u.id
+       WHERE p.gym_id = $1
+         AND p.status = 'pendente'
+       ORDER BY p.data_vencimento ASC
+           LIMIT 5`,
             [gymId]
         );
 

@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const pool = require('../config/db.js');
-const authMiddleware = require('../middleware/auth.js');
+const pool = require('../config/db');
+const authMiddleware = require('../middleware/auth');
 
-router.post('/checkin', authMiddleware, async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
     const { credencial, method, terminalId } = req.body;
     // credencial = valor lido do QR (coluna qr_code) ou PIN digitado (coluna pin_checkin)
     // method = 'qr' | 'pin'
@@ -27,7 +27,7 @@ router.post('/checkin', authMiddleware, async (req, res) => {
         if (!membro) {
             valido = false;
             motivoInvalido = 'Credencial não encontrada';
-        } else if (membro.status !== 'active') {
+        } else if (membro.status !== 'ativo') {
             valido = false;
             motivoInvalido = 'Membro inativo';
         }
@@ -35,9 +35,9 @@ router.post('/checkin', authMiddleware, async (req, res) => {
         let tipo = 'entrada';
         if (valido) {
             const { rows: ultimos } = await pool.query(
-                `SELECT tipo FROM checkins 
-         WHERE membro_id = $1 AND valido = true AND DATE(data_hora) = CURRENT_DATE 
-         ORDER BY data_hora DESC LIMIT 1`,
+                `SELECT tipo FROM checkins
+                 WHERE membro_id = $1 AND valido = true AND DATE(data_hora) = CURRENT_DATE
+                 ORDER BY data_hora DESC LIMIT 1`,
                 [membroId]
             );
             tipo = (!ultimos[0] || ultimos[0].tipo === 'saida') ? 'entrada' : 'saida';
@@ -45,9 +45,9 @@ router.post('/checkin', authMiddleware, async (req, res) => {
 
         // Sempre grava — tentativas inválidas também viram registro de auditoria
         await pool.query(
-            `INSERT INTO checkins 
-       (membro_id, gym_id, data_hora, metodo, valido, motivo_invalido, terminal_id, ip_address, registrado_por, tipo) 
-       VALUES ($1, $2, NOW(), $3, $4, $5, $6, $7, $8, $9)`,
+            `INSERT INTO checkins
+             (membro_id, gym_id, data_hora, metodo, valido, motivo_invalido, terminal_id, ip_address, registrado_por, tipo)
+             VALUES ($1, $2, NOW(), $3, $4, $5, $6, $7, $8, $9)`,
             [membroId, gymId, metodo, valido, motivoInvalido, terminalId ?? 'web-app', ipAddress, registradoPor, tipo]
         );
 

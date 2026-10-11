@@ -64,7 +64,7 @@ export default function Toolbar({
                 {/* Avatar */}
                 {userPhoto ? (
                     <img
-                        src={`http://localhost:5000${userPhoto}`}
+                        src={`http://localhost:3001${userPhoto}`}
                         alt={userName}
                         className="w-8 h-8 rounded-[4px] object-cover ml-1"
                     />

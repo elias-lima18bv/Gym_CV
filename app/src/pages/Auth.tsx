@@ -119,10 +119,10 @@ export default function Auth() {
                 login(data.token, data.user);
                 toast.success("Bem-vindo de volta!");
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             // Erros de duplicidade (409) do backend vêm com mensagens específicas
             // ("Email já cadastrado" / "Já existe um membro cadastrado com esse nome")
-            const message = err?.message ?? "Erro inesperado. Tente novamente.";
+            const message = err instanceof Error ? err.message : "Erro inesperado. Tente novamente.";
 
             if (message.toLowerCase().includes("email")) {
                 setErrors((prev) => ({ ...prev, email: message }));
@@ -212,8 +212,9 @@ export default function Auth() {
                                     className={inputClass(errors.genero)}
                                 >
                                     <option value="" className="bg-[hsl(0,0%,21%)]">Gênero</option>
-                                    <option value="M" className="bg-[hsl(0,0%,21%)]">Masculino</option>
-                                    <option value="F" className="bg-[hsl(0,0%,21%)]">Feminino</option>
+                                    <option value="masculino" className="bg-[hsl(0,0%,21%)]">Masculino</option>
+                                    <option value="feminino" className="bg-[hsl(0,0%,21%)]">Feminino</option>
+                                    <option value="outro" className="bg-[hsl(0,0%,21%)]">Outro</option>
                                 </select>
                                 <FieldError message={errors.genero} />
                             </div>

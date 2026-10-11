@@ -13,7 +13,14 @@ export function formatCVE(amount: number): string {
 }
 
 export function formatDate(dateStr: string): string {
-  const d = new Date(dateStr + "T12:00:00");
+  if (!dateStr) return "-";
+  // O Postgres pode devolver a coluna DATE como "1995-12-18" ou, depois de
+  // passar pelo driver pg + JSON, como ISO completo "1995-12-18T00:00:00.000Z".
+  // Pegamos só os primeiros 10 caracteres (AAAA-MM-DD) antes de anexar o
+  // horário fixo — assim funciona nos dois casos, sem duplicar o "T".
+  const datePart = dateStr.slice(0, 10);
+  const d = new Date(datePart + "T12:00:00");
+  if (isNaN(d.getTime())) return "-";
   return d.toLocaleDateString("pt-PT", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 

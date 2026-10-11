@@ -78,17 +78,17 @@ router.get('/stats', auth, async (req, res) => {
         // Faturas pendentes
         const faturasPendentes = await pool.query(
             `SELECT
-           p.id,
-           u.nome,
-           p.descricao,
-           p.valor,
-           p.data_vencimento
-       FROM pagamentos p
-                JOIN usuarios u ON p.membro_id = u.id
-       WHERE p.gym_id = $1
-         AND p.status = 'pendente'
-       ORDER BY p.data_vencimento ASC
-           LIMIT 5`,
+                 p.id,
+                 u.nome,
+                 p.descricao,
+                 p.valor,
+                 p.data_vencimento
+             FROM pagamentos p
+                      JOIN usuarios u ON p.membro_id = u.id
+             WHERE p.gym_id = $1
+               AND p.status = 'pendente'
+             ORDER BY p.data_vencimento ASC
+                 LIMIT 5`,
             [gymId]
         );
 

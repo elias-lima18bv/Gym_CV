@@ -116,7 +116,7 @@ interface AppContextType extends AppState {
 /* ========== CONTEXT ========== */
 
 const AppContext = createContext<AppContextType | null>(null);
-const API_URL = "http://localhost:5000/api";
+const API_URL = "http://localhost:3001/api";
 
 export function AppProvider({ children }: { children: ReactNode }) {
     const [state, setState] = useState<AppState>({

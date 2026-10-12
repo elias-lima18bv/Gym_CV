@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../config/db');
 const auth = require('../middleware/auth');
-const { calcularCobranca } = require('../utils/planos');
+const { criarAssinaturaComPagamento } = require('../utils/assinaturas');
+const { metodoPagamentoValido } = require('../utils/pagamentos');
 
 // GET /api/assinaturas/membro/:membroId — histórico de assinaturas do membro
 router.get('/membro/:membroId', auth, async (req, res) => {
@@ -29,6 +30,10 @@ router.post('/', auth, async (req, res) => {
 
     if (!membro_id || !plano_id) {
         return res.status(400).json({ error: 'membro_id e plano_id são obrigatórios' });
+    }
+
+    if (!metodoPagamentoValido(metodo_pagamento)) {
+        return res.status(400).json({ error: 'Método de pagamento inválido' });
     }
 
     const client = await pool.connect();
@@ -58,21 +63,17 @@ router.post('/', auth, async (req, res) => {
             [membro_id]
         );
 
-        // O valor vem sempre do plano (nunca do que o cliente enviar), para evitar preço errado
-        const { valor: valorFinal } = calcularCobranca(plano);
-        const duracao = plano.duracao_dias ?? 30;
-
-        const novaAssinatura = await client.query(
-            `INSERT INTO assinaturas
-             (membro_id, plano_id, gym_id, data_inicio, data_fim, valor_pago, metodo_pagamento,
-              status, auto_renovar, criado_por, created_at, updated_at)
-             VALUES ($1,$2,$3,CURRENT_DATE,CURRENT_DATE + ($4 || ' days')::interval,$5,$6,'ativa',true,$7,NOW(),NOW())
-                 RETURNING id, data_inicio, data_fim, valor_pago`,
-            [membro_id, plano_id, gymId, duracao, valorFinal, metodo_pagamento ?? null, req.user.id]
-        );
+        // Cria a assinatura e o pagamento (valor sempre vindo do plano) na mesma transação
+        const { assinatura, pagamento } = await criarAssinaturaComPagamento(client, {
+            membroId: membro_id,
+            plano,
+            gymId,
+            metodoPagamento: metodo_pagamento,
+            criadoPor: req.user.id,
+        });
 
         await client.query('COMMIT');
-        res.status(201).json({ assinatura: novaAssinatura.rows[0], plano_nome: plano.nome });
+        res.status(201).json({ assinatura, pagamento, plano_nome: plano.nome });
     } catch (err) {
         await client.query('ROLLBACK');
         console.error(err);

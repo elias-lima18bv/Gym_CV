@@ -18,6 +18,17 @@ const getAuthHeaderOnly = () => {
     };
 };
 
+export interface RegisterData {
+    nome: string;
+    email: string;
+    telefone: string;
+    senha: string;
+    data_nascimento: string | null;
+    genero: string | null;
+    bi: string;
+    gym_id: number;
+}
+
 export const api = {
     // Auth
     async login(email: string, senha: string) {
@@ -32,7 +43,7 @@ export const api = {
         return data;
     },
 
-    async register(userData: any) {
+    async register(userData: RegisterData) {
         const res = await fetch(`${API_URL}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -55,8 +66,17 @@ export const api = {
     // Dashboard
     async getDashboardStats() {
         const res = await fetch(`${API_URL}/dashboard/stats`, { headers: getHeaders() });
-        if (!res.ok) throw new Error('Erro ao carregar dashboard');
-        return res.json();
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error ?? 'Erro ao carregar dashboard');
+        return data;
+    },
+
+    // Gráfico de receitas: periodo = '7d' | '30d' | '90d' | '1y'
+    async getReceitas(periodo: string) {
+        const res = await fetch(`${API_URL}/dashboard/receitas?periodo=${periodo}`, { headers: getHeaders() });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error ?? 'Erro ao carregar receitas');
+        return data as { data: string; planos: number; extras: number }[];
     },
 
     // Planos
@@ -125,6 +145,28 @@ export const api = {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error ?? 'Erro ao buscar histórico de assinaturas');
         return data;
+    },
+
+    // Check-in por QR ou PIN
+    async checkin(credencial: string, method: 'qr' | 'pin') {
+        let res: Response;
+        try {
+            res = await fetch(`${API_URL}/checkin`, {
+                method: 'POST',
+                headers: getHeaders(),
+                body: JSON.stringify({ credencial, method }),
+            });
+        } catch {
+            throw new Error('Falha na conexão com o servidor');
+        }
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error ?? 'Erro ao processar check-in');
+        return data as {
+            success: boolean;
+            type: 'entrada' | 'saida';
+            member: { name: string };
+            timestamp: string;
+        };
     },
 
     // Upload

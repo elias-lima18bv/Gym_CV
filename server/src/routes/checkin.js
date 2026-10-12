@@ -22,7 +22,8 @@ router.post('/', authMiddleware, async (req, res) => {
         let valido = true;
         let motivoInvalido = null;
         const membroId = membro?.id ?? null;
-        const gymId = membro?.gym_id ?? null;
+        // Credencial desconhecida: não há membro, então usa o ginásio de quem opera o terminal
+        const gymId = membro?.gym_id ?? req.user.gym_id ?? null;
 
         if (!membro) {
             valido = false;
@@ -41,15 +42,42 @@ router.post('/', authMiddleware, async (req, res) => {
                 [membroId]
             );
             tipo = (!ultimos[0] || ultimos[0].tipo === 'saida') ? 'entrada' : 'saida';
+
+            // A assinatura só é exigida na ENTRADA. Quem já está dentro do ginásio pode
+            // sempre registar a saída, mesmo que a assinatura tenha vencido entretanto.
+            if (tipo === 'entrada') {
+                const { rows: assinaturas } = await pool.query(
+                    `SELECT (data_fim IS NULL OR data_fim >= CURRENT_DATE) AS vigente
+                     FROM assinaturas
+                     WHERE membro_id = $1 AND status = 'ativa'
+                     ORDER BY created_at DESC LIMIT 1`,
+                    [membroId]
+                );
+
+                if (!assinaturas[0]) {
+                    valido = false;
+                    motivoInvalido = 'Sem assinatura ativa';
+                } else if (!assinaturas[0].vigente) {
+                    valido = false;
+                    motivoInvalido = 'Assinatura vencida';
+                }
+            }
         }
 
         // Sempre grava — tentativas inválidas também viram registro de auditoria
-        await pool.query(
-            `INSERT INTO checkins
-             (membro_id, gym_id, data_hora, metodo, valido, motivo_invalido, terminal_id, ip_address, registrado_por, tipo)
-             VALUES ($1, $2, NOW(), $3, $4, $5, $6, $7, $8, $9)`,
-            [membroId, gymId, metodo, valido, motivoInvalido, terminalId ?? 'web-app', ipAddress, registradoPor, tipo]
-        );
+        try {
+            await pool.query(
+                `INSERT INTO checkins
+                 (membro_id, gym_id, data_hora, metodo, valido, motivo_invalido, terminal_id, ip_address, registrado_por, tipo)
+                 VALUES ($1, $2, NOW(), $3, $4, $5, $6, $7, $8, $9)`,
+                [membroId, gymId, metodo, valido, motivoInvalido, terminalId ?? 'web-app', ipAddress, registradoPor, tipo]
+            );
+        } catch (auditErr) {
+            // Um check-in válido TEM de ficar registado, senão a entrada não existe: falha com erro.
+            if (valido) throw auditErr;
+            // Numa recusa, a falha de auditoria não deve esconder o motivo real ao operador.
+            console.error('Falha ao gravar a tentativa recusada em checkins:', auditErr.message);
+        }
 
         if (!valido) {
             return res.status(membro ? 403 : 404).json({ error: motivoInvalido });

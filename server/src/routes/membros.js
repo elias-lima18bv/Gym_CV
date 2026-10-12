@@ -7,7 +7,8 @@ const bcrypt = require('bcryptjs');
 const pool = require('../config/db');
 const auth = require('../middleware/auth');
 const { gerarPin, gerarQrCode, gerarSenhaTemporaria } = require('../utils/credentials');
-const { calcularCobranca } = require('../utils/planos');
+const { criarAssinaturaComPagamento } = require('../utils/assinaturas');
+const { metodoPagamentoValido } = require('../utils/pagamentos');
 
 const PERFIL_MEMBRO = 7; // mesma constante já usada em dashboard.js
 
@@ -96,6 +97,11 @@ router.post('/', auth, (req, res) => {
             return res.status(400).json({ error: erroValidacao });
         }
 
+        if (!metodoPagamentoValido(metodo_pagamento)) {
+            if (req.file) fs.unlink(req.file.path, () => {});
+            return res.status(400).json({ error: 'Método de pagamento inválido' });
+        }
+
         const client = await pool.connect();
         try {
             await client.query('BEGIN');
@@ -130,6 +136,7 @@ router.post('/', auth, (req, res) => {
             const membro = novoUsuario.rows[0];
 
             let assinatura = null;
+            let pagamento = null;
             if (plano_id) {
                 const planoResult = await client.query('SELECT * FROM planos WHERE id = $1', [plano_id]);
                 const plano = planoResult.rows[0];
@@ -139,24 +146,21 @@ router.post('/', auth, (req, res) => {
                     return res.status(400).json({ error: 'Plano não encontrado' });
                 }
 
-                // O valor vem sempre do plano (nunca do que o cliente enviar), para evitar preço errado
-                const { valor: valorFinal } = calcularCobranca(plano);
-                const duracao = plano.duracao_dias ?? 30;
-
-                const novaAssinatura = await client.query(
-                    `INSERT INTO assinaturas
-                     (membro_id, plano_id, gym_id, data_inicio, data_fim, valor_pago, metodo_pagamento,
-                      status, auto_renovar, criado_por, created_at, updated_at)
-                     VALUES ($1,$2,$3,CURRENT_DATE,CURRENT_DATE + ($4 || ' days')::interval,$5,$6,'ativa',true,$7,NOW(),NOW())
-                         RETURNING id, data_inicio, data_fim, valor_pago`,
-                    [membro.id, plano_id, gymId, duracao, valorFinal, metodo_pagamento ?? null, req.user.id]
-                );
-                assinatura = novaAssinatura.rows[0];
+                // Cria a assinatura e o pagamento (valor sempre vindo do plano) na mesma transação
+                const resultado = await criarAssinaturaComPagamento(client, {
+                    membroId: membro.id,
+                    plano,
+                    gymId,
+                    metodoPagamento: metodo_pagamento,
+                    criadoPor: req.user.id,
+                });
+                assinatura = resultado.assinatura;
+                pagamento = resultado.pagamento;
             }
 
             await client.query('COMMIT');
 
-            res.status(201).json({ membro, assinatura, senha_temporaria: senhaTemporaria });
+            res.status(201).json({ membro, assinatura, pagamento, senha_temporaria: senhaTemporaria });
         } catch (err) {
             await client.query('ROLLBACK');
             if (req.file) fs.unlink(req.file.path, () => {});

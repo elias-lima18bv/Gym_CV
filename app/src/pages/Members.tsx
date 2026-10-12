@@ -46,6 +46,7 @@ interface FormState {
   genero: string;
   status: string;
   plano_id: string;
+  metodo_pagamento: string;
 }
 
 const emptyForm: FormState = {
@@ -57,6 +58,7 @@ const emptyForm: FormState = {
   genero: "",
   status: "ativo",
   plano_id: "",
+  metodo_pagamento: "",
 };
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -76,6 +78,16 @@ const HINTS = {
   genero: "Obrigatório",
   plano: "O valor é definido automaticamente pelo plano escolhido",
 };
+
+// Os "value" são exatamente os aceites pela restrição assinaturas_metodo_pagamento_check
+const METODOS_PAGAMENTO = [
+  { value: "dinheiro", label: "Dinheiro" },
+  { value: "transferencia", label: "Transferência" },
+  { value: "cartao_credito", label: "Cartão de crédito" },
+  { value: "cartao_debito", label: "Cartão de débito" },
+  { value: "mbway", label: "MB Way" },
+  { value: "paypal", label: "PayPal" },
+];
 
 function validarMembro(form: FormState): FormErrors {
   const errors: FormErrors = {};
@@ -138,19 +150,29 @@ export default function Members() {
     }
   };
 
-  const fetchPlanos = async () => {
-    try {
-      const data = await api.getPlanos();
-      setPlanos(data);
-    } catch {
-      // Rota de planos pode ainda não existir no backend — não trava a tela de membros por causa disso
-      setPlanos([]);
-    }
-  };
-
+  // Carregamento inicial. O estado só é alterado depois da resposta chegar (nunca de forma
+  // síncrona dentro do effect) e `loading` já começa a true.
   useEffect(() => {
-    setLoading(true);
-    Promise.all([fetchMembros(), fetchPlanos()]).finally(() => setLoading(false));
+    let cancelado = false;
+    Promise.all([
+      api.getMembros(),
+      // Se a rota de planos falhar, a lista de membros continua a funcionar
+      api.getPlanos().catch(() => [] as Plano[]),
+    ])
+        .then(([listaMembros, listaPlanos]) => {
+          if (cancelado) return;
+          setMembros(listaMembros);
+          setPlanos(listaPlanos);
+        })
+        .catch((err: unknown) => {
+          if (!cancelado) toast.error(err instanceof Error ? err.message : "Erro ao carregar membros");
+        })
+        .finally(() => {
+          if (!cancelado) setLoading(false);
+        });
+    return () => {
+      cancelado = true;
+    };
   }, []);
 
   // Libera a URL de preview da foto ao trocar ou desmontar, evitando vazamento de memória
@@ -188,6 +210,7 @@ export default function Members() {
         genero: membro.genero ?? "",
         status: membro.status,
         plano_id: membro.plano_id ? String(membro.plano_id) : "",
+        metodo_pagamento: "",
       });
     } else {
       setSelectedMembro(null);
@@ -259,7 +282,10 @@ export default function Members() {
     if (fotoFile) body.append("foto", fotoFile);
 
     if (modalMode === "add") {
-      if (formData.plano_id) body.append("plano_id", formData.plano_id);
+      if (formData.plano_id) {
+        body.append("plano_id", formData.plano_id);
+        if (formData.metodo_pagamento.trim()) body.append("metodo_pagamento", formData.metodo_pagamento.trim());
+      }
     }
 
     setSaving(true);
@@ -480,13 +506,16 @@ export default function Members() {
                           </div>
                           <div>
                             <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Método Pagamento</label>
-                            <input
-                                type="text"
+                            <select
                                 value={planoForm.metodo_pagamento}
                                 onChange={(e) => setPlanoForm({ ...planoForm, metodo_pagamento: e.target.value })}
-                                className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00]"
-                                placeholder="Ex: Dinheiro, Transferência"
-                            />
+                                className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00] cursor-pointer"
+                            >
+                              <option value="">Não indicar</option>
+                              {METODOS_PAGAMENTO.map((m) => (
+                                  <option key={m.value} value={m.value}>{m.label}</option>
+                              ))}
+                            </select>
                           </div>
                         </div>
                       </div>
@@ -625,6 +654,22 @@ export default function Members() {
                                   />
                                 </Hint>
                               </div>
+                            </div>
+                        )}
+
+                        {modalMode === "add" && planoNovo && (
+                            <div>
+                              <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Método de Pagamento</label>
+                              <select
+                                  value={formData.metodo_pagamento}
+                                  onChange={(e) => setFormData({ ...formData, metodo_pagamento: e.target.value })}
+                                  className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00] cursor-pointer"
+                              >
+                                <option value="">Não indicar</option>
+                                {METODOS_PAGAMENTO.map((m) => (
+                                    <option key={m.value} value={m.value}>{m.label}</option>
+                                ))}
+                              </select>
                             </div>
                         )}
 

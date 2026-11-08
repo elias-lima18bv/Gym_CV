@@ -24,7 +24,9 @@ app.use('/api/membros', require('./routes/membros'));
 app.use('/api/planos', require('./routes/planos'));
 app.use('/api/assinaturas', require('./routes/assinaturas'));
 app.use('/api/upload', require('./routes/upload'));
-
+app.use('/api/pagamentos', require('./routes/pagamentos'));
+app.use('/api/relatorios', require('./routes/relatorios'));
+app.use('/api/sessoes', require('./routes/sessoes'));
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });

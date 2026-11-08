@@ -4,6 +4,7 @@ import {MapPin, Plus, Users, X} from "lucide-react";
 import {gymAreas, scheduleSessions as allSessions} from "@/data/mockData";
 import {getDayName, getShortDayName} from "@/lib/utils";
 import {toast} from "sonner";
+import SessoesCalendario from "@/components/SessoesCalendario";
 
 const timeSlots = [
   "07:00", "08:00", "09:00", "10:00", "11:00",
@@ -13,7 +14,8 @@ const timeSlots = [
 
 const daysOfWeek = [1, 2, 3, 4, 5, 6]; // Mon-Sat
 
-export default function Schedule() {
+// Grelha semanal de aulas em grupo (o conteúdo original desta página, sem alterações)
+function AulasSemana() {
   const { team } = useApp();
   const [sessions, setSessions] = useState(allSessions);
   const [showAdd, setShowAdd] = useState(false);
@@ -63,148 +65,178 @@ export default function Schedule() {
   };
 
   return (
-    <div className="p-4 lg:p-6 animate-fade-in">
-      {/* Day Tabs */}
-      <div className="flex gap-1 mb-5 bg-[#353535] border border-[#4A4A4A] rounded-xl p-1 overflow-x-auto">
-        {daysOfWeek.map((day) => (
+      <div className="p-4 lg:p-6 animate-fade-in">
+        {/* Day Tabs */}
+        <div className="flex gap-1 mb-5 bg-[#353535] border border-[#4A4A4A] rounded-xl p-1 overflow-x-auto">
+          {daysOfWeek.map((day) => (
+              <button
+                  key={day}
+                  onClick={() => setSelectedDay(day)}
+                  className={`flex-1 min-w-[80px] py-2 rounded-lg text-sm font-medium transition-all cursor-pointer whitespace-nowrap ${
+                      selectedDay === day
+                          ? "bg-[#FF6B00] text-white"
+                          : "text-[#B0AEAA] hover:text-[#F2F2F2]"
+                  }`}
+              >
+                {getShortDayName(day)}
+              </button>
+          ))}
+        </div>
+
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-[#F2F2F2] font-semibold text-lg">{getDayName(selectedDay)}</h2>
           <button
-            key={day}
-            onClick={() => setSelectedDay(day)}
-            className={`flex-1 min-w-[80px] py-2 rounded-lg text-sm font-medium transition-all cursor-pointer whitespace-nowrap ${
-              selectedDay === day
-                ? "bg-[#FF6B00] text-white"
-                : "text-[#B0AEAA] hover:text-[#F2F2F2]"
-            }`}
+              onClick={() => setShowAdd(true)}
+              className="flex items-center gap-2 px-3 py-2 gradient-orange rounded-md text-white text-xs font-semibold uppercase tracking-wide hover:brightness-110 transition-all cursor-pointer"
           >
-            {getShortDayName(day)}
+            <Plus size={14} />
+            Nova Sessao
           </button>
-        ))}
-      </div>
+        </div>
 
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-[#F2F2F2] font-semibold text-lg">{getDayName(selectedDay)}</h2>
-        <button
-          onClick={() => setShowAdd(true)}
-          className="flex items-center gap-2 px-3 py-2 gradient-orange rounded-md text-white text-xs font-semibold uppercase tracking-wide hover:brightness-110 transition-all cursor-pointer"
-        >
-          <Plus size={14} />
-          Nova Sessao
-        </button>
-      </div>
-
-      {/* Time Grid */}
-      <div className="space-y-2">
-        {timeSlots.map((time) => {
-          const slotSessions = filteredSessions.filter((s) => s.startTime === time);
-          return (
-            <div key={time} className="flex gap-3">
-              <div className="w-14 shrink-0 text-right pt-2">
-                <span className="text-[#B0AEAA] text-xs font-medium">{time}</span>
-              </div>
-              <div className="flex-1 min-h-[48px] bg-[#353535] border border-[#4A4A4A] rounded-lg p-2">
-                {slotSessions.length === 0 ? (
-                  <div className="h-full flex items-center">
-                    <span className="text-[#4A4A4A] text-xs">-</span>
+        {/* Time Grid */}
+        <div className="space-y-2">
+          {timeSlots.map((time) => {
+            const slotSessions = filteredSessions.filter((s) => s.startTime === time);
+            return (
+                <div key={time} className="flex gap-3">
+                  <div className="w-14 shrink-0 text-right pt-2">
+                    <span className="text-[#B0AEAA] text-xs font-medium">{time}</span>
                   </div>
-                ) : (
-                  <div className="flex flex-wrap gap-2">
-                    {slotSessions.map((session) => {
-                      const trainer = team.find((t) => t.id === session.trainerId);
-                      const area = gymAreas.find((a) => a.id === session.areaId);
-                      const occupancy = Math.round((session.enrolled / session.maxCapacity) * 100);
-                      return (
-                        <div
-                          key={session.id}
-                          className={`flex-1 min-w-[200px] border-l-[3px] rounded-md p-3 ${areaColor(session.areaId)}`}
-                        >
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <h4 className="text-[#F2F2F2] text-sm font-semibold">{session.title}</h4>
-                              <div className="flex items-center gap-3 mt-1 text-[#B0AEAA] text-xs">
+                  <div className="flex-1 min-h-[48px] bg-[#353535] border border-[#4A4A4A] rounded-lg p-2">
+                    {slotSessions.length === 0 ? (
+                        <div className="h-full flex items-center">
+                          <span className="text-[#4A4A4A] text-xs">-</span>
+                        </div>
+                    ) : (
+                        <div className="flex flex-wrap gap-2">
+                          {slotSessions.map((session) => {
+                            const trainer = team.find((t) => t.id === session.trainerId);
+                            const area = gymAreas.find((a) => a.id === session.areaId);
+                            const occupancy = Math.round((session.enrolled / session.maxCapacity) * 100);
+                            return (
+                                <div
+                                    key={session.id}
+                                    className={`flex-1 min-w-[200px] border-l-[3px] rounded-md p-3 ${areaColor(session.areaId)}`}
+                                >
+                                  <div className="flex items-start justify-between">
+                                    <div>
+                                      <h4 className="text-[#F2F2F2] text-sm font-semibold">{session.title}</h4>
+                                      <div className="flex items-center gap-3 mt-1 text-[#B0AEAA] text-xs">
                                 <span className="flex items-center gap-1">
                                   <MapPin size={10} />
                                   {area?.name}
                                 </span>
-                                <span className="flex items-center gap-1">
+                                        <span className="flex items-center gap-1">
                                   <Users size={10} />
-                                  {session.enrolled}/{session.maxCapacity}
+                                          {session.enrolled}/{session.maxCapacity}
                                 </span>
-                              </div>
-                            </div>
-                            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
-                              occupancy >= 90 ? "bg-[rgba(239,68,68,0.2)] text-[#EF4444]" :
-                              occupancy >= 70 ? "bg-[rgba(245,158,11,0.2)] text-[#F59E0B]" :
-                              "bg-[rgba(34,197,94,0.2)] text-[#22C55E]"
-                            }`}>
+                                      </div>
+                                    </div>
+                                    <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                                        occupancy >= 90 ? "bg-[rgba(239,68,68,0.2)] text-[#EF4444]" :
+                                            occupancy >= 70 ? "bg-[rgba(245,158,11,0.2)] text-[#F59E0B]" :
+                                                "bg-[rgba(34,197,94,0.2)] text-[#22C55E]"
+                                    }`}>
                               {occupancy}%
                             </span>
-                          </div>
-                          {trainer && (
-                            <p className="text-[#B0AEAA] text-xs mt-1.5">{trainer.name}</p>
-                          )}
+                                  </div>
+                                  {trainer && (
+                                      <p className="text-[#B0AEAA] text-xs mt-1.5">{trainer.name}</p>
+                                  )}
+                                </div>
+                            );
+                          })}
                         </div>
-                      );
-                    })}
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+                </div>
+            );
+          })}
+        </div>
 
-      {/* Add Session Modal */}
-      {showAdd && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAdd(false)} />
-          <div className="relative bg-[#353535] border border-[#4A4A4A] rounded-2xl w-full max-w-md animate-scale-in">
-            <div className="flex items-center justify-between p-5 border-b border-[#4A4A4A]">
-              <h3 className="text-[#F2F2F2] font-semibold text-lg">Nova Sessao</h3>
-              <button onClick={() => setShowAdd(false)} className="p-1 text-[#B0AEAA] hover:text-[#F2F2F2] cursor-pointer"><X size={20} /></button>
-            </div>
-            <div className="p-5 space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Titulo *</label>
-                <input type="text" value={newSession.title} onChange={(e) => setNewSession({ ...newSession, title: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00]" placeholder="Nome da sessao" />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Inicio</label>
-                  <select value={newSession.startTime} onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00] cursor-pointer">
-                    <option value="">--</option>
-                    {timeSlots.map((t) => <option key={t} value={t}>{t}</option>)}
-                  </select>
+        {/* Add Session Modal */}
+        {showAdd && (
+            <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+              <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowAdd(false)} />
+              <div className="relative bg-[#353535] border border-[#4A4A4A] rounded-2xl w-full max-w-md animate-scale-in">
+                <div className="flex items-center justify-between p-5 border-b border-[#4A4A4A]">
+                  <h3 className="text-[#F2F2F2] font-semibold text-lg">Nova Sessao</h3>
+                  <button onClick={() => setShowAdd(false)} className="p-1 text-[#B0AEAA] hover:text-[#F2F2F2] cursor-pointer"><X size={20} /></button>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Fim</label>
-                  <select value={newSession.endTime} onChange={(e) => setNewSession({ ...newSession, endTime: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00] cursor-pointer">
-                    <option value="">--</option>
-                    {timeSlots.map((t) => <option key={t} value={t}>{t}</option>)}
-                  </select>
+                <div className="p-5 space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Titulo *</label>
+                    <input type="text" value={newSession.title} onChange={(e) => setNewSession({ ...newSession, title: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00]" placeholder="Nome da sessao" />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Inicio</label>
+                      <select value={newSession.startTime} onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00] cursor-pointer">
+                        <option value="">--</option>
+                        {timeSlots.map((t) => <option key={t} value={t}>{t}</option>)}
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Fim</label>
+                      <select value={newSession.endTime} onChange={(e) => setNewSession({ ...newSession, endTime: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00] cursor-pointer">
+                        <option value="">--</option>
+                        {timeSlots.map((t) => <option key={t} value={t}>{t}</option>)}
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Treinador</label>
+                    <select value={newSession.trainerId} onChange={(e) => setNewSession({ ...newSession, trainerId: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00] cursor-pointer">
+                      <option value="">Selecionar treinador</option>
+                      {team.filter((t) => t.status === "active").map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Area</label>
+                    <select value={newSession.areaId} onChange={(e) => setNewSession({ ...newSession, areaId: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00] cursor-pointer">
+                      <option value="">Selecionar area</option>
+                      {gymAreas.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div className="flex justify-end gap-3 p-5 border-t border-[#4A4A4A]">
+                  <button onClick={() => setShowAdd(false)} className="px-4 py-2.5 border border-[#4A4A4A] rounded-md text-sm font-medium text-[#B0AEAA] cursor-pointer hover:bg-[#404040]">Cancelar</button>
+                  <button onClick={handleAddSession} className="px-5 py-2.5 gradient-orange rounded-md text-white text-sm font-semibold cursor-pointer hover:brightness-110">Adicionar</button>
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Treinador</label>
-                <select value={newSession.trainerId} onChange={(e) => setNewSession({ ...newSession, trainerId: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00] cursor-pointer">
-                  <option value="">Selecionar treinador</option>
-                  {team.filter((t) => t.status === "active").map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold text-[#B0AEAA] uppercase mb-1.5">Area</label>
-                <select value={newSession.areaId} onChange={(e) => setNewSession({ ...newSession, areaId: e.target.value })} className="w-full bg-[#2B2B2B] border border-[#4A4A4A] rounded-md px-3 py-2.5 text-sm text-[#F2F2F2] focus:outline-none focus:border-[#FF6B00] cursor-pointer">
-                  <option value="">Selecionar area</option>
-                  {gymAreas.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
-                </select>
-              </div>
             </div>
-            <div className="flex justify-end gap-3 p-5 border-t border-[#4A4A4A]">
-              <button onClick={() => setShowAdd(false)} className="px-4 py-2.5 border border-[#4A4A4A] rounded-md text-sm font-medium text-[#B0AEAA] cursor-pointer hover:bg-[#404040]">Cancelar</button>
-              <button onClick={handleAddSession} className="px-5 py-2.5 gradient-orange rounded-md text-white text-sm font-semibold cursor-pointer hover:brightness-110">Adicionar</button>
-            </div>
+        )}
+      </div>
+  );
+}
+
+type Vista = "aulas" | "sessoes";
+
+// A página "Horário" passa a ter dois separadores: as aulas da semana (como estava) e as sessões de treino
+export default function Schedule() {
+  const [vista, setVista] = useState<Vista>("aulas");
+
+  const separador = (chave: Vista, texto: string) => (
+      <button
+          onClick={() => setVista(chave)}
+          className={`flex-1 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer whitespace-nowrap ${
+              vista === chave ? "bg-[#FF6B00] text-white" : "text-[#B0AEAA] hover:text-[#F2F2F2]"
+          }`}
+      >
+        {texto}
+      </button>
+  );
+
+  return (
+      <div>
+        <div className="px-4 lg:px-6 pt-4 lg:pt-6">
+          <div className="flex gap-1 max-w-md bg-[#353535] border border-[#4A4A4A] rounded-xl p-1">
+            {separador("aulas", "Aulas da semana")}
+            {separador("sessoes", "Sessões de treino")}
           </div>
         </div>
-      )}
-    </div>
+        {vista === "aulas" ? <AulasSemana /> : <SessoesCalendario />}
+      </div>
   );
 }

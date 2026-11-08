@@ -8,7 +8,7 @@ const pool = require('../config/db');
 const auth = require('../middleware/auth');
 const { gerarPin, gerarQrCode, gerarSenhaTemporaria } = require('../utils/credentials');
 const { criarAssinaturaComPagamento } = require('../utils/assinaturas');
-const { metodoPagamentoValido } = require('../utils/pagamentos');
+const { metodoPagamentoValido } = require('../utils/metodosPagamento');
 
 const PERFIL_MEMBRO = 7; // mesma constante já usada em dashboard.js
 
@@ -49,26 +49,41 @@ function validarMembro({ nome, email, telefone, bi, data_nascimento, genero }) {
     return null;
 }
 
+// Dentro do callback do multer o Express NÃO apanha erros: uma exceção ali (ou uma falha
+// de base de dados antes do try) matava o servidor inteiro. Este invólucro transforma
+// qualquer erro inesperado numa resposta 500 e apaga a foto que tenha ficado no disco.
+function protegido(req, res, mensagem, fn) {
+    return (uploadErr) => {
+        Promise.resolve()
+            .then(() => fn(uploadErr))
+            .catch((err) => {
+                console.error(err);
+                if (req.file) fs.unlink(req.file.path, () => {});
+                if (!res.headersSent) res.status(500).json({ error: mensagem });
+            });
+    };
+}
+
 // GET /api/membros — lista membros do ginásio, com o plano ativo (se houver)
 router.get('/', auth, async (req, res) => {
     const gymId = req.user.gym_id;
     try {
         const { rows } = await pool.query(
             `SELECT
-                 u.id, u.nome, u.email, u.telefone, u.foto_url, u.status,
-                 u.bi, u.data_nascimento, u.genero, u.qr_code, u.pin_checkin, u.created_at,
-                 a.id AS assinatura_id, a.data_inicio, a.data_fim, a.status AS assinatura_status,
-                 p.id AS plano_id, p.nome AS plano_nome
-             FROM usuarios u
-                      LEFT JOIN LATERAL (
-                 SELECT * FROM assinaturas
-                 WHERE membro_id = u.id
-                 ORDER BY (status = 'ativa') DESC, created_at DESC
-                     LIMIT 1
+           u.id, u.nome, u.email, u.telefone, u.foto_url, u.status,
+           u.bi, u.data_nascimento, u.genero, u.qr_code, u.pin_checkin, u.created_at,
+           a.id AS assinatura_id, a.data_inicio, a.data_fim, a.status AS assinatura_status,
+           p.id AS plano_id, p.nome AS plano_nome
+       FROM usuarios u
+                LEFT JOIN LATERAL (
+           SELECT * FROM assinaturas
+           WHERE membro_id = u.id
+           ORDER BY (status = 'ativa') DESC, created_at DESC
+               LIMIT 1
            ) a ON true
-                 LEFT JOIN planos p ON p.id = a.plano_id
-             WHERE u.gym_id = $1 AND u.perfil_id = $2
-             ORDER BY u.created_at DESC`,
+                LEFT JOIN planos p ON p.id = a.plano_id
+       WHERE u.gym_id = $1 AND u.perfil_id = $2
+       ORDER BY u.created_at DESC`,
             [gymId, PERFIL_MEMBRO]
         );
         res.json(rows);
@@ -80,7 +95,7 @@ router.get('/', auth, async (req, res) => {
 
 // POST /api/membros — cria membro + assinatura numa única transação
 router.post('/', auth, (req, res) => {
-    upload.single('foto')(req, res, async (uploadErr) => {
+    upload.single('foto')(req, res, protegido(req, res, 'Erro ao cadastrar membro', async (uploadErr) => {
         if (uploadErr) {
             return res.status(400).json({ error: uploadErr.message });
         }
@@ -126,10 +141,10 @@ router.post('/', auth, (req, res) => {
 
             const novoUsuario = await client.query(
                 `INSERT INTO usuarios
-                 (nome, email, telefone, senha_hash, data_nascimento, genero, bi, gym_id, perfil_id,
-                  status, email_verificado, foto_url, qr_code, pin_checkin, created_at, updated_at)
-                 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,false,$11,$12,$13,NOW(),NOW())
-                     RETURNING id, nome, email, telefone, status, foto_url, qr_code, pin_checkin, created_at`,
+         (nome, email, telefone, senha_hash, data_nascimento, genero, bi, gym_id, perfil_id,
+          status, email_verificado, foto_url, qr_code, pin_checkin, created_at, updated_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,false,$11,$12,$13,NOW(),NOW())
+         RETURNING id, nome, email, telefone, status, foto_url, qr_code, pin_checkin, created_at`,
                 [nome.trim(), email, telefone, senha_hash, data_nascimento, genero, bi, gymId, PERFIL_MEMBRO,
                     status, fotoUrl, qrCode, pinCheckin]
             );
@@ -169,12 +184,12 @@ router.post('/', auth, (req, res) => {
         } finally {
             client.release();
         }
-    });
+    }));
 });
 
 // PUT /api/membros/:id — atualiza dados pessoais (não mexe em senha, qr_code ou pin)
 router.put('/:id', auth, (req, res) => {
-    upload.single('foto')(req, res, async (uploadErr) => {
+    upload.single('foto')(req, res, protegido(req, res, 'Erro ao atualizar membro', async (uploadErr) => {
         if (uploadErr) {
             return res.status(400).json({ error: uploadErr.message });
         }
@@ -189,8 +204,8 @@ router.put('/:id', auth, (req, res) => {
 
         try {
             const conflito = await pool.query(
-                `SELECT id, email, nome FROM usuarios
-                 WHERE (email = $1 OR LOWER(nome) = LOWER($2)) AND id != $3`,
+                `SELECT id, email, nome FROM usuarios 
+         WHERE (email = $1 OR LOWER(nome) = LOWER($2)) AND id != $3`,
                 [email, nome.trim(), id]
             );
             if (conflito.rows.length > 0) {
@@ -211,10 +226,10 @@ router.put('/:id', auth, (req, res) => {
 
             const { rows } = await pool.query(
                 `UPDATE usuarios SET
-                                     nome = $1, email = $2, telefone = $3, bi = $4, data_nascimento = $5,
-                                     genero = $6, status = $7, foto_url = COALESCE($8, foto_url), updated_at = NOW()
-                 WHERE id = $9
-                     RETURNING id, nome, email, telefone, status, foto_url, bi, data_nascimento, genero`,
+             nome = $1, email = $2, telefone = $3, bi = $4, data_nascimento = $5,
+             genero = $6, status = $7, foto_url = COALESCE($8, foto_url), updated_at = NOW()
+         WHERE id = $9
+         RETURNING id, nome, email, telefone, status, foto_url, bi, data_nascimento, genero`,
                 [nome.trim(), email, telefone, bi, data_nascimento, genero, status, fotoUrl ?? null, id]
             );
 
@@ -226,7 +241,7 @@ router.put('/:id', auth, (req, res) => {
             console.error(err);
             res.status(500).json({ error: 'Erro ao atualizar membro' });
         }
-    });
+    }));
 });
 
 // DELETE /api/membros/:id — soft delete (mantém histórico de checkins/pagamentos)

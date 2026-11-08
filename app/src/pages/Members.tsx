@@ -4,6 +4,7 @@ import { Edit2, Eye, Filter, Plus, Search, Trash2, Upload, X } from "lucide-reac
 import { formatDate, getInitials } from "@/lib/utils";
 import { toast } from "sonner";
 import { api } from "@/services/api";
+import { METODOS_PAGAMENTO } from "@/lib/pagamentos";
 
 type ModalMode = "add" | "edit" | "view" | "plano" | null;
 
@@ -78,16 +79,6 @@ const HINTS = {
   genero: "Obrigatório",
   plano: "O valor é definido automaticamente pelo plano escolhido",
 };
-
-// Os "value" são exatamente os aceites pela restrição assinaturas_metodo_pagamento_check
-const METODOS_PAGAMENTO = [
-  { value: "dinheiro", label: "Dinheiro" },
-  { value: "transferencia", label: "Transferência" },
-  { value: "cartao_credito", label: "Cartão de crédito" },
-  { value: "cartao_debito", label: "Cartão de débito" },
-  { value: "mbway", label: "MB Way" },
-  { value: "paypal", label: "PayPal" },
-];
 
 function validarMembro(form: FormState): FormErrors {
   const errors: FormErrors = {};

@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require('../config/db');
 const auth = require('../middleware/auth');
 const { criarAssinaturaComPagamento } = require('../utils/assinaturas');
-const { metodoPagamentoValido } = require('../utils/pagamentos');
+const { metodoPagamentoValido } = require('../utils/metodosPagamento');
 
 // GET /api/assinaturas/membro/:membroId — histórico de assinaturas do membro
 router.get('/membro/:membroId', auth, async (req, res) => {
